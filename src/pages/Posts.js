@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import CreatePost from '../components/CreatePost';
 
 export default function Posts({ onNavigate }) {
   const { token } = useAuth();
@@ -14,11 +15,11 @@ export default function Posts({ onNavigate }) {
     const delayDebounce = setTimeout(() => {
       setSpecialityFilter(searchTerm);
     }, 500);
-
     return () => clearTimeout(delayDebounce);
   }, [searchTerm]);
 
   useEffect(() => {
+    if (!token) return;
     setLoading(true);
     setError(null);
 
@@ -39,9 +40,18 @@ export default function Posts({ onNavigate }) {
       .finally(() => setLoading(false));
   }, [token, specialityFilter]);
 
+  // Callback for when a post is created
+  const handlePostCreated = (newPost) => {
+    setPosts((prev) => [newPost, ...prev]);
+  };
+
   return (
     <div>
       <h2>Posts</h2>
+
+      {/* Post creation form */}
+      <CreatePost onPostCreated={handlePostCreated} />
+
       <input
         type="search"
         placeholder="Filter by speciality"
@@ -61,7 +71,9 @@ export default function Posts({ onNavigate }) {
               {post.author.username} ({post.speciality || 'N/A'})
             </strong>
             : {post.content}{' '}
-            <button onClick={() => onNavigate('postDetail', { postId: post.id })}>View</button>
+            <button onClick={() => onNavigate('postDetail', { postId: post.id })}>
+              View
+            </button>
           </li>
         ))}
       </ul>
