@@ -11,7 +11,6 @@ export default function PostDetail({ postId, onNavigate }) {
   const [loadingLike, setLoadingLike] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch post detail and comments
   const fetchPost = () => {
     setLoadingPost(true);
     setError(null);
