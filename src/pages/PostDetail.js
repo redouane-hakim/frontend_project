@@ -33,7 +33,6 @@ export default function PostDetail({ postId, onNavigate }) {
     fetchPost();
   }, [postId]);
 
-  // Add comment handler
   const addComment = (e) => {
     e.preventDefault();
     if (!commentText.trim()) {
@@ -61,7 +60,6 @@ export default function PostDetail({ postId, onNavigate }) {
       .finally(() => setLoadingComment(false));
   };
 
-  // Toggle like handler with XOR logic
   const toggleLike = (value) => {
     setLoadingLike(true);
     fetch(`http://localhost:8000/api/posts/${postId}/like/`, {
@@ -81,7 +79,6 @@ export default function PostDetail({ postId, onNavigate }) {
       .finally(() => setLoadingLike(false));
   };
 
-  // Handle Buy Product — start messaging conversation and navigate
   const handleBuyProduct = () => {
     if (!post || !post.id) return;
     fetch(`http://localhost:8000/api/messaging/buy-product/${post.id}/`, {
@@ -93,7 +90,6 @@ export default function PostDetail({ postId, onNavigate }) {
         return res.json();
       })
       .then((data) => {
-        // Assuming backend returns { conversation_id }
         if (data.conversation_id) {
           onNavigate('messaging');
           alert('Conversation started with product owner. Check your messages.');
@@ -105,75 +101,92 @@ export default function PostDetail({ postId, onNavigate }) {
       .catch(() => alert('Failed to start conversation'));
   };
 
-  if (loadingPost) return <p>Loading post...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (loadingPost) return <p className="text-center text-[#5C2E0E]">Loading post...</p>;
+  if (error) return <p className="text-center text-red-600">{error}</p>;
   if (!post) return null;
 
   return (
-    <div>
-      <h3>
-        Post by {post.author.username} ({post.speciality || 'N/A'})
+    <div className="max-w-3xl mx-auto p-6 bg-white border border-[#e0cfc4] rounded-xl shadow mt-6">
+      <h3 className="text-xl font-bold text-[#5C2E0E] mb-2">
+        Post by {post.author.username} <span className="text-sm font-normal">({post.speciality || 'N/A'})</span>
       </h3>
-      <p>{post.content}</p>
-      <p>Contact Info: {post.contact_info}</p>
+      <p className="mb-2 text-[#5C2E0E]">{post.content}</p>
+      <p className="text-sm mb-2 text-gray-700">
+        <strong>Contact Info:</strong> {post.contact_info}
+      </p>
 
-      {post.price !== undefined && (
-        <p>
-          <strong>Price:</strong> ${post.price.toFixed(2)}
+      {post.type === 'product' && (
+        <p className="mb-2 text-[#5C2E0E]">
+          <strong>Price:</strong> ${Number(post.price).toFixed(2)} MAD
         </p>
       )}
 
-      <p>Likes: {post.likes_count}</p>
+      <p className="mb-3 text-sm text-gray-600">Likes: {post.likes_count}</p>
 
-      <button
-        onClick={() => toggleLike(1)}
-        disabled={loadingLike}
-        aria-label="Like post"
-      >
-        👍
-      </button>
-      <button
-        onClick={() => toggleLike(-1)}
-        disabled={loadingLike}
-        aria-label="Dislike post"
-      >
-        👎
-      </button>
+      <div className="flex gap-2 mb-4">
+        <button
+          onClick={() => toggleLike(1)}
+          disabled={loadingLike}
+          className="px-3 py-1 bg-green-100 text-green-800 rounded hover:bg-green-200 transition"
+        >
+          👍
+        </button>
+        <button
+          onClick={() => toggleLike(-1)}
+          disabled={loadingLike}
+          className="px-3 py-1 bg-red-100 text-red-800 rounded hover:bg-red-200 transition"
+        >
+          👎
+        </button>
+      </div>
 
-      {post.price !== undefined && (
-        <div style={{ marginTop: '10px' }}>
-          <button onClick={handleBuyProduct} disabled={loadingLike}>
+      {post.type === 'product' && (
+        <div className="mb-4">
+          <button
+            onClick={handleBuyProduct}
+            disabled={loadingLike}
+            className="px-4 py-2 bg-[#5C2E0E] text-white rounded hover:bg-[#4A2600] transition"
+          >
             Buy Product
           </button>
         </div>
       )}
 
-      <h4>Comments</h4>
-      <ul>
+      <h4 className="text-lg font-semibold text-[#5C2E0E] mt-6 mb-2">Comments</h4>
+      <ul className="mb-4 space-y-2">
         {comments.map((c) => (
-          <li key={c.id}>
+          <li key={c.id} className="bg-[#FAF3EF] p-3 rounded-md border text-[#5C2E0E]">
             <b>{c.author.username}</b>: {c.text}
           </li>
         ))}
       </ul>
 
-      <form onSubmit={addComment}>
+      <form onSubmit={addComment} className="space-y-3">
         <input
           value={commentText}
           onChange={(e) => setCommentText(e.target.value)}
           placeholder="Add a comment"
           disabled={loadingComment}
           required
-          aria-label="Add comment"
+          className="w-full p-2 border border-[#D6BFAF] rounded focus:outline-none focus:ring-2 focus:ring-[#5C2E0E]"
         />
-        <button type="submit" disabled={loadingComment}>
+        <button
+          type="submit"
+          disabled={loadingComment}
+          className="w-full py-2 bg-[#5C2E0E] text-white rounded hover:bg-[#4A2600] transition"
+        >
           {loadingComment ? 'Submitting...' : 'Submit'}
         </button>
       </form>
 
-      <button style={{ marginTop: '10px' }} onClick={() => onNavigate('posts')}>
-        Back to Posts
-      </button>
+      <div className="mt-6 text-center">
+        <button
+          onClick={() => onNavigate('posts')}
+          className="px-4 py-2 text-[#5C2E0E] border border-[#5C2E0E] rounded hover:bg-[#FAF3EF] transition"
+        >
+          Back to Posts
+        </button>
+      </div>
     </div>
   );
 }

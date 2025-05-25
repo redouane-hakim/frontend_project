@@ -21,5 +21,12 @@ export default function BuyProductButton({ postId, token, onNavigate }) {
     }
   };
 
-  return <button onClick={handleBuy}>Buy Product</button>;
+  return (
+    <button
+      onClick={handleBuy}
+      className="mt-3 px-4 py-2 bg-[#5C2E0E] text-white rounded-lg shadow hover:bg-[#4A2600] transition duration-200"
+    >
+      Buy Product
+    </button>
+  );
 }

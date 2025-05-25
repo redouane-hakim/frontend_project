@@ -12,26 +12,46 @@ export default function Header({ onNavigate }) {
   };
 
   return (
-    <header
-      style={{
-        padding: '10px 20px',
-        borderBottom: '1px solid #ddd',
-        marginBottom: '20px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        flexWrap: 'wrap',
-      }}
-    >
-      <nav>
-        <button onClick={() => onNavigate('posts')}>Posts</button>
-        <button onClick={() => onNavigate('profile')}>Profile</button>
-        <button onClick={() => onNavigate('messaging')}>Messages</button>
-        <button onClick={() => onNavigate('reports')}>Reports</button>
+    <header className="bg-[#FAF3EF] border-b border-[#e0cfc4] shadow-sm px-4 py-3 flex flex-wrap items-center justify-between">
+      {/* Left Navigation */}
+      <nav className="flex gap-4 text-[#5C2E0E] font-medium">
+        <button
+          onClick={() => onNavigate('posts')}
+          className="hover:text-[#8B4513] transition-colors"
+        >
+          Posts
+        </button>
+        <button
+          onClick={() => onNavigate('profile')}
+          className="hover:text-[#8B4513] transition-colors"
+        >
+          Profile
+        </button>
+        <button
+          onClick={() => onNavigate('messaging')}
+          className="hover:text-[#8B4513] transition-colors"
+        >
+          Messages
+        </button>
+        <button
+          onClick={() => onNavigate('reports')}
+          className="hover:text-[#8B4513] transition-colors"
+        >
+          Reports
+        </button>
       </nav>
-      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '10px' }}>
-        {user && <span>Welcome, <strong>{user.username}</strong></span>}
-        <button onClick={handleLogout} style={{ color: 'red' }}>
+
+      {/* Right User Info & Logout */}
+      <div className="flex items-center gap-3 text-[#5C2E0E] mt-2 sm:mt-0">
+        {user && (
+          <span className="text-sm sm:text-base">
+            Welcome, <strong>{user.username}</strong>
+          </span>
+        )}
+        <button
+          onClick={handleLogout}
+          className="text-red-600 hover:text-red-800 transition-colors text-sm sm:text-base"
+        >
           Logout
         </button>
       </div>

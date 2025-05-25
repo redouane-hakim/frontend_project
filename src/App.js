@@ -11,6 +11,8 @@ import Posts from './pages/Posts';
 import PostDetail from './pages/PostDetail';
 import Messaging from './pages/Messaging';
 import Reports from './pages/Reports';
+import UserProfilePage from "./pages/UserProfilePage";
+import ConversationPage from "./pages/ConversationPage";
 
 function App() {
   const [route, setRoute] = useState({ name: 'login' });
@@ -68,6 +70,18 @@ function App() {
             <Reports onNavigate={navigate} />
           </ProtectedRoute>
         );
+      case 'UserProfilePage':
+        return (
+            <ProtectedRoute fallback={<Login onNavigate={navigate} />}>
+              <UserProfilePage userId={routeParams.userId} onNavigate={navigate} />
+            </ProtectedRoute>
+        );
+      case 'conversation':
+        return (
+            <ProtectedRoute fallback={<Login onNavigate={navigate} />}>
+              <ConversationPage conversationId={routeParams.conversationId} onNavigate={navigate} />
+            </ProtectedRoute>
+  );
       default:
         return <Login onNavigate={navigate} />;
     }
