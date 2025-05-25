@@ -4,7 +4,7 @@ import CreatePost from '../components/CreatePost';
 import ReportPostModel from '../components/ReportPostModel';
 
 export default function Posts({ onNavigate }) {
-  const { token } = useAuth();
+  const { token,user } = useAuth();
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [specialityFilter, setSpecialityFilter] = useState('');
